@@ -5,22 +5,31 @@ interface ITuple {
     helloTest(): string;
 }
 
-class Tuple extends Array<number> implements ITuple {
+class Tuple implements ITuple {
+    private vals: number[];
 
-    get x(): number { return this[0]; }   
-    set x(val: number) { this[0] = val; }
+    get x(): number { return this.vals[0]; }   
+    set x(val: number) { this.vals[0] = val; }
 
-    get y(): number { return this[1]; }
-    set y(val: number) {  this[1] = val; }
+    get y(): number { return this.vals[1]; }
+    set y(val: number) {  this.vals[1] = val; }
 
-    get z(): number { return this[2] };
-    set z(val: number) { this[2] = val; }
+    get z(): number { return this.vals[2] };
+    set z(val: number) { this.vals[2] = val; }
 
-    constructor (x: number = 0, y: number = 0, z: number = 0) {
-        super(3);
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    constructor();
+    constructor(vals: number[]);
+    constructor(x: number, y: number, z: number);
+    constructor (x?: number | number[], y?: number, z?: number) {
+        if (x instanceof Array) {
+            this.vals = x;
+        }
+        else if (typeof(x) === "number") {
+            this.vals = [x, y, z];
+        }
+        else{
+            this.vals = [0, 0, 0];
+        }
     }
 
     helloTest(): string {
@@ -28,15 +37,19 @@ class Tuple extends Array<number> implements ITuple {
     }
 
     _plus(val: Tuple) {
-        return this.map(function(n: number, i: number) {
-            return n + val[i];
+        let results =  this.vals.map(function(n: number, i: number) {
+            return n + val.vals[i];
         });
+
+        return new Tuple(results);
     }
 
     _minus(val: Tuple) {
-        return this.map(function(n: number, i: number) {
+        let results = this.vals.map(function(n: number, i: number) {
             return n - val[i];
         });
+
+        return new Tuple(results);
     }
 
     _negate() {
@@ -44,7 +57,7 @@ class Tuple extends Array<number> implements ITuple {
     }
 
     _times(scalar: number) {
-        return this.map(o => o * scalar);
+        return new Tuple(this.vals.map(o => o * scalar));
     }
 
     static zero() {

@@ -1,5 +1,5 @@
-export class Parent extends Array<number> {
-    sayHello() {
+export class Parent{
+    sayHello(): string {
         return "howdy";
     }
 }
