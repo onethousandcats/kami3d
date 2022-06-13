@@ -1,0 +1,1 @@
+{"version":3,"file":"vector.js","sourceRoot":"","sources":["../../../geometry/old/vector.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAAA,iCAAgC;AAEhC;IAA4B,0BAAK;IAC7B,gBAAY,CAAa,EAAE,CAAa,EAAE,CAAa;QAA3C,kBAAA,EAAA,KAAa;QAAE,kBAAA,EAAA,KAAa;QAAE,kBAAA,EAAA,KAAa;eACnD,kBAAM,CAAC,EAAE,CAAC,EAAE,CAAC,CAAC;IAClB,CAAC;IACL,aAAC;AAAD,CAAC,AAJD,CAA4B,aAAK,GAIhC;AAJY,wBAAM"}

@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "@types/jest": "^28.1.1",
+    "jest": "^28.1.0",
+    "ts-jest": "^28.0.4"
+  },
+  "scripts": {
+    "build": "npx tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "operator-overloading": "^0.5.1"
+  }
+}
