@@ -21,17 +21,40 @@ test("tuple_new_tupleWithValues", () => {
 });
 
 test("tuple_methods_multiplyByScalar", () => {
-    expect(tuple._times(2)).toEqual(new Tuple(2, 4, 6));
+    expect(tuple.times(2)).toEqual(new Tuple(2, 4, 6));
 });
 
 test("tuple_methods_divideByScalar", () => {
-    expect(tuple._dividedBy(2)).toEqual(new Tuple(0.5, 1, 1.5));
+    expect(tuple.dividedBy(2)).toEqual(new Tuple(0.5, 1, 1.5));
 });
 
-test("tuple_methods_addAnotherVector", () => {
-    expect(tuple._plus(tuple)).toEqual(tuple._times(2));
+test("tuple_methods_addAnotherTuple", () => {
+    expect(tuple.plus(tuple)).toEqual(tuple.times(2));
 });
 
-test("tuple_methods_subtractAnotherVector", () => {
-    expect(tuple._minus(tuple)).toEqual(Tuple.zero());
+test("tuple_methods_subtractAnotherTuple", () => {
+    expect(tuple.minus(tuple)).toEqual(Tuple.zero());
+});
+
+test("tuple_methods_magnitude", () => {
+    expect(tuple.magnitude()).toEqual(Math.sqrt(14));
+    expect(new Tuple(1, 0, 0).magnitude()).toEqual(1);
+});
+
+test("tuple_methods_normalize", () => {
+    expect(tuple.normalize()).toEqual(new Tuple(0.2672612419124244, 0.5345224838248488, 0.8017837257372732));
+    expect(new Tuple(5, 0, 0).normalize()).toEqual(new Tuple(1, 0, 0));
+});
+
+test("tuple_methods_dotProduct", () => {
+    expect(tuple.dot(new Tuple(2, 3, 4))).toEqual(20.0);
+});
+
+test("tuple_methods_crossProduct", () => {
+    let t1 = new Tuple(1, 2, 3);
+    let t2 = new Tuple(2, 3, 4);
+    let t3 = new Tuple(-1, 2, -1);
+
+    expect(t1.cross(t2)).toEqual(t3);
+    expect(t2.cross(t1)).toEqual(t3.negate());
 });

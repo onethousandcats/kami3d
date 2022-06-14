@@ -3,11 +3,15 @@ interface ITuple {
     y: number;
     z: number;
 
-    _plus(val: ITuple): ITuple;
-    _minus(val: ITuple): ITuple;
-    _times(scalar: number): ITuple;
-    _dividedBy(scalar: number): ITuple;
-
+    plus(val: ITuple): ITuple;
+    minus(val: ITuple): ITuple;
+    times(scalar: number): ITuple;
+    dividedBy(scalar: number): ITuple;
+    magnitude() : number;
+    normalize() : ITuple;
+    negate() : ITuple;
+    dot(val: ITuple): number;
+    cross(val: ITuple): ITuple;
 }
 
 class Tuple implements ITuple {
@@ -37,7 +41,7 @@ class Tuple implements ITuple {
         }
     }
 
-    _plus(val: Tuple) {
+    plus(val: Tuple) {
         let results =  this.vals.map(function(n: number, i: number) {
             return n + val.vals[i];
         });
@@ -45,7 +49,7 @@ class Tuple implements ITuple {
         return new Tuple(results);
     }
 
-    _minus(val: Tuple) {
+    minus(val: Tuple) {
         let results = this.vals.map(function(n: number, i: number) {
             return n - val.vals[i];
         });
@@ -53,16 +57,46 @@ class Tuple implements ITuple {
         return new Tuple(results);
     }
 
-    _negate() {
-        return Tuple.zero()._minus(this);
+    negate() {
+        return Tuple.zero().minus(this);
     }
 
-    _times(scalar: number) {
+    times(scalar: number) {
         return new Tuple(this.vals.map(o => o * scalar));
     }
 
-    _dividedBy(scalar: number) {
+    dividedBy(scalar: number) {
         return new Tuple(this.vals.map(o => o / scalar));
+    }
+
+    magnitude(): number {
+        let sumOfCoordinates = this.vals.map(o => o * o)
+            .reduce((sum, current) => sum + current);
+
+        return Math.sqrt(sumOfCoordinates);
+    }
+
+    normalize(): Tuple {
+        var magnitude = this.magnitude();
+        return new Tuple(this.vals.map(o => o / magnitude));
+    }
+
+    dot(val: Tuple): number {
+        return this.vals.map(function(n: number, i: number) {
+            return n * val.vals[i];
+        }).reduce((sum, current) => sum + current);
+    }
+
+    cross(val: Tuple): ITuple {
+        var crossProduct = [0, 1, 2].map(i => {
+            var j = (i + 1) % 3;
+            var k = (j + 1) % 3;
+            return this.vals[j] * val.vals[k] - this.vals[k] * val.vals[j];
+        });
+
+        console.log(new Tuple(crossProduct));
+
+        return new Tuple(crossProduct);
     }
 
     static zero() {
