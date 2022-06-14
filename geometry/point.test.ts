@@ -13,6 +13,10 @@ test("point_add_returnsSum", () => {
     expect(p1._plus(p2)).toEqual(new Point(18, 24, 24));
 });
 
-test("point_hello_canCallParentMethod", () => {
-    expect(p1.helloTest()).toEqual("test");
+test("point_subtract_returnsSum", () => {
+    expect(p1._minus(p2)).toEqual(new Point(2, -2, 2));
+});
+
+test("point_negate_returnsNegation", () => {
+    expect(p1._negate()).toEqual(new Point(-10, -11, -13));
 });

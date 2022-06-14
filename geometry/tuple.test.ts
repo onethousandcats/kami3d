@@ -1,5 +1,7 @@
 import { Tuple } from "./tuple";
 
+const tuple = new Tuple(1, 2, 3);
+
 test("tuple_new_returnsZeroedTuple", () => {
     var zeroedTuple = new Tuple();
     
@@ -13,14 +15,23 @@ test("tuple_zero_returnsZeroedTuple", () => {
 });
 
 test("tuple_new_tupleWithValues", () => {
-    var tuple = new Tuple(1, 2, 3);
-    
     expect(tuple.x).toEqual(1);
     expect(tuple.y).toEqual(2);
     expect(tuple.z).toEqual(3);
 });
 
-test("tuple_hello_canCallMethod", () => {
-    var tuple = new Tuple();
-    expect(tuple.helloTest()).toEqual("test");
+test("tuple_methods_multiplyByScalar", () => {
+    expect(tuple._times(2)).toEqual(new Tuple(2, 4, 6));
+});
+
+test("tuple_methods_divideByScalar", () => {
+    expect(tuple._dividedBy(2)).toEqual(new Tuple(0.5, 1, 1.5));
+});
+
+test("tuple_methods_addAnotherVector", () => {
+    expect(tuple._plus(tuple)).toEqual(tuple._times(2));
+});
+
+test("tuple_methods_subtractAnotherVector", () => {
+    expect(tuple._minus(tuple)).toEqual(Tuple.zero());
 });

@@ -2,7 +2,12 @@ interface ITuple {
     x: number;
     y: number;
     z: number;
-    helloTest(): string;
+
+    _plus(val: ITuple): ITuple;
+    _minus(val: ITuple): ITuple;
+    _times(scalar: number): ITuple;
+    _dividedBy(scalar: number): ITuple;
+
 }
 
 class Tuple implements ITuple {
@@ -32,10 +37,6 @@ class Tuple implements ITuple {
         }
     }
 
-    helloTest(): string {
-        return "test";
-    }
-
     _plus(val: Tuple) {
         let results =  this.vals.map(function(n: number, i: number) {
             return n + val.vals[i];
@@ -46,7 +47,7 @@ class Tuple implements ITuple {
 
     _minus(val: Tuple) {
         let results = this.vals.map(function(n: number, i: number) {
-            return n - val[i];
+            return n - val.vals[i];
         });
 
         return new Tuple(results);
@@ -58,6 +59,10 @@ class Tuple implements ITuple {
 
     _times(scalar: number) {
         return new Tuple(this.vals.map(o => o * scalar));
+    }
+
+    _dividedBy(scalar: number) {
+        return new Tuple(this.vals.map(o => o / scalar));
     }
 
     static zero() {
