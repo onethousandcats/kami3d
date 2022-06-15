@@ -3,6 +3,8 @@ interface ITuple {
     y: number;
     z: number;
 
+    vals: number[];
+
     plus(val: ITuple): ITuple;
     minus(val: ITuple): ITuple;
     times(scalar: number): ITuple;
@@ -16,7 +18,7 @@ interface ITuple {
 }
 
 class Tuple implements ITuple {
-    private vals: number[];
+    vals: number[];
 
     get x(): number { return this.vals[0]; }   
     set x(val: number) { this.vals[0] = val; }
@@ -62,8 +64,6 @@ class Tuple implements ITuple {
         return Tuple.zero().minus(this);
     }
 
-    times(val: Tuple): Tuple;
-    times(scalar: number): Tuple;
     times(val: number | Tuple): Tuple {
         if (val instanceof Tuple) {
             let results = this.vals.map(function(n: number, i: number) {

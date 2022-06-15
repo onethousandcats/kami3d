@@ -9,16 +9,14 @@ export class Color extends Tuple {
     set blue(val: number) { this.z = val; }
 
     plus(val: Tuple): Color {
-        return <Color> super.plus(val);
+        return new Color(super.plus(val).vals);
     }
 
     minus(val: Tuple): Color {
-        return <Color> super.minus(val);
+        return new Color(super.minus(val).vals);
     }
 
-    // times(val: Tuple): Color;
-    // times(scalar: number): Color;
-    // times(val: number | Tuple): Color {
-    //     return super.times(val) as Color;
-    // }
+    times(val: number | Tuple): Color {
+        return new Color(super.times(val).vals);
+    }
 }
