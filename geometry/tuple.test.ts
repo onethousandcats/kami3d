@@ -24,6 +24,10 @@ test("tuple_methods_multiplyByScalar", () => {
     expect(tuple.times(2)).toEqual(new Tuple(2, 4, 6));
 });
 
+test("tuple_methods_multiplyByVector", () => {
+    expect(tuple.times(tuple)).toEqual(new Tuple(1, 4, 9));
+});
+
 test("tuple_methods_divideByScalar", () => {
     expect(tuple.dividedBy(2)).toEqual(new Tuple(0.5, 1, 1.5));
 });

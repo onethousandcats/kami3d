@@ -6,6 +6,7 @@ interface ITuple {
     plus(val: ITuple): ITuple;
     minus(val: ITuple): ITuple;
     times(scalar: number): ITuple;
+    times(val: ITuple): ITuple;
     dividedBy(scalar: number): ITuple;
     magnitude() : number;
     normalize() : ITuple;
@@ -61,8 +62,17 @@ class Tuple implements ITuple {
         return Tuple.zero().minus(this);
     }
 
-    times(scalar: number) {
-        return new Tuple(this.vals.map(o => o * scalar));
+    times(val: Tuple): Tuple;
+    times(scalar: number): Tuple;
+    times(val: number | Tuple): Tuple {
+        if (val instanceof Tuple) {
+            let results = this.vals.map(function(n: number, i: number) {
+                return n * val.vals[i];
+            });
+
+            return new Tuple(results);
+        }
+        return new Tuple(this.vals.map(o => o * val));
     }
 
     dividedBy(scalar: number) {
@@ -93,8 +103,6 @@ class Tuple implements ITuple {
             var k = (j + 1) % 3;
             return this.vals[j] * val.vals[k] - this.vals[k] * val.vals[j];
         });
-
-        console.log(new Tuple(crossProduct));
 
         return new Tuple(crossProduct);
     }
