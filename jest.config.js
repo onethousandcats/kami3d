@@ -1,5 +1,5 @@
 module.exports = {
-    roots: ['<rootDir>/geometry'],
+    roots: ['<rootDir>/library'],
     transform: {
         '^.+\\.tsx?$': 'ts-jest',
     },
