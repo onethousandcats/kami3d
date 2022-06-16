@@ -52,3 +52,18 @@ test("canvas_ppm_writeBody", () => {
     expect(ppm.slice(3, 6)).toEqual(body);
 });
 
+test("canvas_ppm_lineLengthDoesNotExceed70", () => {
+    let c = new Canvas(10, 2);
+    c.writeAllPixels(new Color(1, 0.8, 0.6));
+
+    let ppm = c.toPPM();
+
+    let testLines = new Array<string>();
+    testLines.push(`255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204`);
+    testLines.push(`153 255 204 153 255 204 153 255 204 153 255 204 153`);
+    testLines.push(`255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204`);
+    testLines.push(`153 255 204 153 255 204 153 255 204 153 255 204 153`);
+
+    expect(ppm.slice(3, 6)).toEqual
+});
+

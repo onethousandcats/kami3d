@@ -20,6 +20,12 @@ export class Canvas {
         this.pixels[this.getIndex(x, y)] = c;
     }
 
+    writeAllPixels(c: Color) {
+        for (let i = 0; i < this.pixels.length; i++) {
+            this.pixels[i] = c;
+        }
+    }
+
     pixelAt(x: number, y: number): Color {
         return this.pixels[this.getIndex(x, y)];
     }
@@ -47,14 +53,36 @@ export class Canvas {
         let body = new Array<string>();
 
         for (let y = 0; y < this.height; y++) {
-            let row = new Array<string>();
+            let row = new Array<Color>();
             for (let x = 0; x < this.width; x++) {
                 let pixel = this.pixelAt(x, y) ?? new Color();
-                row.push(`${this.colorOf(pixel.red)} ${this.colorOf(pixel.green)} ${this.colorOf(pixel.blue)}`);
+                row.push(pixel);
             }
-            body.push(row.join(' '));
+            let lines = this.splitIntoRowsForLengthRequirement(row);
+            body = body.concat(lines);
         }
 
         return body;
+    }
+
+    private splitIntoRowsForLengthRequirement(items: Color[]): Array<string> {
+        let result = new Array<string>();
+        let row = "";
+        items.forEach(item => {
+            for (let i = 0; i < 3; i++) {
+                let next = `${this.colorOf(item.vals[i])} `;
+
+                if (row.length + next.length > 71) {
+                    // start new row
+                    result.push(row.trim());
+                    row = "";
+                }
+    
+                row += next;
+            }
+        });
+        result.push(row.trim());
+
+        return result;
     }
 }
