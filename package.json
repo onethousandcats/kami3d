@@ -11,6 +11,7 @@
     "sandbox": "npx ts-node sandbox.ts"
   },
   "dependencies": {
+    "express": "^4.18.1",
     "operator-overloading": "^0.5.1"
   }
 }
