@@ -26,6 +26,10 @@ export class Canvas {
         }
     }
 
+    getPixels(): Color[] {
+        return this.pixels.map(pixel => new Color(this.colorOf(pixel.red), this.colorOf(pixel.green), this.colorOf(pixel.blue)));
+    }
+
     pixelAt(x: number, y: number): Color {
         return this.pixels[this.getIndex(x, y)];
     }
