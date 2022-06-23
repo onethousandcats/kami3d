@@ -1,3 +1,5 @@
+import { Matrix } from "../math/matrix";
+
 interface ITuple {
     x: number;
     y: number;
@@ -15,6 +17,7 @@ interface ITuple {
     negate() : ITuple;
     dot(val: ITuple): number;
     cross(val: ITuple): ITuple;
+    toMatrix() : Matrix;
 }
 
 class Tuple implements ITuple {
@@ -105,6 +108,15 @@ class Tuple implements ITuple {
         });
 
         return new Tuple(crossProduct);
+    }
+
+    toMatrix(): Matrix {
+        let m = [];
+        this.vals.map(function(n: number, i: number) {
+            m.push([n]);
+        });
+
+        return new Matrix(m);
     }
 
     static zero() {
