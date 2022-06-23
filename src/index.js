@@ -7,6 +7,7 @@ var htmlCanvas = document.getElementById("kami-canvas");
 var ctx = htmlCanvas.getContext('2d');
 var width = htmlCanvas.width;
 var height = htmlCanvas.height;
+console.log(height);
 var canvas = new canvas_1.Canvas(width, height);
 var color1 = new color_1.Color(1, 0, 0);
 canvas.writeAllPixels(color1);
@@ -15,7 +16,7 @@ var imageData = ctx.createImageData(width, height);
 var data = imageData.data;
 for (var i = 0; i < data.length; i += 4) {
     var idx = i / 4;
-    var pixel = pixels[i];
+    var pixel = pixels[idx];
     if (pixel != null) {
         data[i + 0] = pixel.red; // red
         data[i + 1] = pixel.green; // green

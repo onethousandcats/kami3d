@@ -9,6 +9,8 @@ let ctx = htmlCanvas.getContext('2d');
 let width = htmlCanvas.width;
 let height = htmlCanvas.height;
 
+console.log(height);
+
 let canvas = new Canvas(width, height);
 let color1 = new Color(1, 0, 0);
 
@@ -23,7 +25,7 @@ let data = imageData.data;
 for (let i = 0; i < data.length; i += 4) {
     let idx = i / 4;
 
-    let pixel = pixels[i];
+    let pixel = pixels[idx];
 
     if (pixel != null) {
         data[i + 0] = pixel.red; // red
