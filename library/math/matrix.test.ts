@@ -249,9 +249,38 @@ test("matrix_inverse_computesCorrectly", () => {
 
     let b = m.inverse;
 
+    let result = new Matrix([
+        [0.21804511278195488, 0.45112781954887216, 0.24060150375939848, -0.045112781954887216],
+        [-0.8082706766917294, -1.4567669172932332, -0.44360902255639095, 0.5206766917293233],
+        [-0.07894736842105263, -0.2236842105263158, -0.05263157894736842, 0.19736842105263158],
+        [-0.5225563909774437, -0.8139097744360902, -0.3007518796992481, 0.30639097744360905]
+    ]);
+
     expect(m.determinant()).toEqual(532);
     expect(m.cofactor(2, 3)).toEqual(-160);
     expect(b.m[3][2]).toEqual(-160/532);
     expect(m.cofactor(3, 2)).toEqual(105);
     expect(b.m[2][3]).toEqual(105/532);
+    expect(b).toEqual(result);
+});
+
+test("matrix_inverse_productMultipliedByInverse", () => {
+    let a = new Matrix([
+        [3, -9, 7, 3],
+        [3, -8, 2, -9],
+        [-4, 4, 4, 1],
+        [-6, 5, -1, 1]
+    ]);
+
+    let b = new Matrix([
+        [8, 2, 2, 2],
+        [3, -1, 7, 0],
+        [7, 0, 5, 4],
+        [6, -2, 0, 5]
+    ]);
+
+    let c = a.times(b);
+    let inverse = b.inverse;
+
+    expect(c.times(inverse)).toEqual(a);
 });
