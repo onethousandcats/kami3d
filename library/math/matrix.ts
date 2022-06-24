@@ -10,16 +10,17 @@ export class Matrix implements IMatrix {
     m: number[][];
 
     constructor();
+    constructor(size: number);
     constructor(m: Array<Array<number>>);
-    constructor(m?: Array<Array<number>>) {
-        if (m == null) {
-            this.m = Array(4);
-            for (let i = 0; i < 4; i++) {
-                this.m[i] = Array(4).fill(0);
-            }
-        }
-        else {
+    constructor(m?: Array<Array<number>> | number) {
+        if (Array.isArray(m)) {
             this.m = m;
+        } else {
+            let size = m ?? 4;
+            this.m = Array(size);
+            for (let i = 0; i < size; i++) {
+                this.m[i] = Array(size).fill(0);
+            }
         }
     }
 
@@ -28,8 +29,29 @@ export class Matrix implements IMatrix {
         return prototype;
     }
 
-    get columns(): number { return this.m[0].length }
-    get rows(): number { return this.m.length }
+    get columns(): number { return this.m[0].length; }
+    get rows(): number { return this.m.length; }
+
+    get size(): number { return this.columns; }
+
+    get invertible(): boolean { return this.determinant() != 0 }
+
+    get inverse(): Matrix {
+        if (!this.invertible) {
+            throw new Error("Not invertible");
+        }
+
+        let m2 = new Matrix(this.size);
+
+        for (let row = 0; row < this.size; row++) {
+            for (let col = 0; col < this.size; col++) {
+                let c = this.cofactor(row, col);
+                m2.m[col][row] = c / this.determinant();
+            }
+        }
+
+        return m2;
+    }
 
     times(val: Matrix | Tuple): Matrix | Tuple {
         let matrix = val instanceof Tuple ? val.toMatrix() : val;
@@ -51,6 +73,59 @@ export class Matrix implements IMatrix {
         }
 
         return val instanceof Tuple ? result.toTuple() : result;
+    }
+
+    transpose(): Matrix {
+        let transpose = new Matrix();
+
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                transpose.m[i][j] = this.m[j][i];
+            }
+        }
+
+        return transpose;
+    }
+
+    determinant(): number {
+        let det = 0;
+
+        if (this.size == 2) {
+            det = this.m[0][0] * this.m[1][1] - this.m[0][1] * this.m[1][0];
+        } else {
+            for(let i = 0; i < this.size; i++) {
+                det += this.m[0][i] * this.cofactor(0, i);
+            }
+        }
+
+        return det;
+    }
+
+    clone(): number[][] {
+        return this.m.map(o => [...o]);
+    }
+
+    submatrix(row: number, column: number): Matrix {
+        let copy = this.clone();
+
+        let arr = copy.map(function (val: number[]) {
+            val.splice(column, 1);
+            return val;
+        });
+
+        arr.splice(row, 1);
+
+        return new Matrix(arr);
+    }
+
+    minor(row: number, column: number): number {
+        return this.submatrix(row, column).determinant();
+    }
+
+    cofactor(row: number, column: number): number {
+        let minor = this.minor(row, column);
+
+        return (row + column) % 2 == 0 ? minor : -minor;
     }
 
     toTuple(): ITuple {

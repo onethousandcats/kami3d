@@ -109,3 +109,149 @@ test("matrix_functions_multiplyByIdentity", () => {
 
     expect(matrix.times(identity)).toEqual(matrix);
 });
+
+test("matrix_functions_transpose", () => {
+    let m = new Matrix(
+        [[1, 2, 3, 4],
+         [2, 4, 4, 2],
+         [8, 6, 4, 1],
+         [0, 0, 0, 1]]);
+
+    let answer = new Matrix(
+        [[1, 2, 8, 0],
+         [2, 4, 6, 0],
+         [3, 4, 4, 0],
+         [4, 2, 1, 1]]);
+
+    expect(m.transpose()).toEqual(answer);
+});
+
+test("matrix_functions_transposeIdentity", () => {
+    let m = Matrix.identity();
+
+    expect(m.transpose()).toEqual(m);
+});
+
+test("matrix_functions_determinant2x2", () => {
+    let m = new Matrix(
+        [[1, 5],
+         [-3, 2]]);
+    
+    expect(m.determinant()).toEqual(17);
+});
+
+test("matrix_submatrix_returnsCorrectValues", () => {
+    let m = new Matrix(
+        [[1, 5, 0],
+         [-3, 2, 7],
+         [0, 6, -3]]);
+
+    let expected = new Matrix(
+        [[-3, 2],
+         [0, 6]]);
+    
+    expect(m.submatrix(0, 2)).toEqual(expected);
+});
+
+test("matrix_submatrix_returnsCorrectValuesAgain", () => {
+    let m = new Matrix(
+        [[-6, 1, 1, 6],
+         [-8, 5, 8, 6],
+         [-1, 0, 8, 2],
+         [-7, 1, -1, 1]]);
+
+    let expected = new Matrix(
+        [[-6, 1, 6],
+         [-8, 8, 6],
+         [-7, -1, 1]]);
+    
+    expect(m.submatrix(2, 1)).toEqual(expected);
+});
+
+test("matrix_minor_3x3", () => {
+    let m = new Matrix(
+        [[3, 5, 0],
+        [2, -1, -7],
+        [6, -1, 5]]);
+
+    let b = m.submatrix(1, 0);
+    
+    expect(b.determinant()).toEqual(25);
+    expect(m.minor(1, 0)).toEqual(25);
+});
+
+test("matrix_cofactor_returnsCorrectSign", () => {
+    let m = new Matrix(
+        [[3, 5, 0],
+        [2, -1, -7],
+        [6, -1, 5]]);
+
+    expect(m.minor(0, 0)).toEqual(-12);
+    expect(m.cofactor(0, 0)).toEqual(-12);
+    expect(m.minor(1, 0)).toEqual(25);
+    expect(m.cofactor(1, 0)).toEqual(-25);
+});
+
+test("matrix_determinant_3x3", () => {
+    let m = new Matrix(
+        [[1, 2, 6],
+        [-5, 8, -4],
+        [2, 6, 4]]);
+
+    expect(m.cofactor(0, 0)).toEqual(56);
+    expect(m.cofactor(0, 1)).toEqual(12);
+    expect(m.cofactor(0, 2)).toEqual(-46);
+    expect(m.determinant()).toEqual(-196);
+});
+
+test("matrix_determinant_4x4", () => {
+    let m = new Matrix(
+        [[-2, -8, 3, 5],
+        [-3, 1, 7, 3],
+        [1, 2, -9, 6],
+        [-6, 7, 7, -9]]);
+
+    expect(m.cofactor(0, 0)).toEqual(690);
+    expect(m.cofactor(0, 1)).toEqual(447);
+    expect(m.cofactor(0, 2)).toEqual(210);
+    expect(m.cofactor(0, 3)).toEqual(51);
+    expect(m.determinant()).toEqual(-4071);
+});
+
+test("matrix_inversion_isInvertible", () => {
+    let m = new Matrix(
+        [[6, 4, 4, 4],
+        [5, 5, 7, 6],
+        [4, -9, 3, -7],
+        [9, 1, 7, -6]]);
+
+    expect(m.determinant()).toEqual(-2120);
+    expect(m.invertible).toBeTruthy;
+});
+
+test("matrix_inversion_isInvertible", () => {
+    let m = new Matrix(
+        [[-4, 2, -2, -3],
+        [9, 6, 2, 6],
+        [0, -5, 1, -5],
+        [0, 0, 0, 0]]);
+
+    expect(m.determinant()).toEqual(0);
+    expect(m.invertible).toBeFalsy;
+});
+
+test("matrix_inverse_computesCorrectly", () => {
+    let m = new Matrix(
+        [[-5, 2, 6, -8],
+        [1, -5, 1, 8],
+        [7, 7, -6, -7],
+        [1, -3, 7, 4]]);
+
+    let b = m.inverse;
+
+    expect(m.determinant()).toEqual(532);
+    expect(m.cofactor(2, 3)).toEqual(-160);
+    expect(b.m[3][2]).toEqual(-160/532);
+    expect(m.cofactor(3, 2)).toEqual(105);
+    expect(b.m[2][3]).toEqual(105/532);
+});
