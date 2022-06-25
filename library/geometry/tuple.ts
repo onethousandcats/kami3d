@@ -4,6 +4,7 @@ interface ITuple {
     x: number;
     y: number;
     z: number;
+    w: number;
 
     vals: number[];
 
@@ -18,6 +19,9 @@ interface ITuple {
     dot(val: ITuple): number;
     cross(val: ITuple): ITuple;
     toMatrix() : Matrix;
+
+    isPoint: boolean;
+    isVector: boolean;
 }
 
 class Tuple implements ITuple {
@@ -32,18 +36,25 @@ class Tuple implements ITuple {
     get z(): number { return this.vals[2] };
     set z(val: number) { this.vals[2] = val; }
 
+    get w(): number { return this.vals[3] };
+    set w(val: number) { this.vals[3] = val; }
+
+    get isPoint(): boolean { return this.w == 1 }
+    get isVector(): boolean { return this.w == 0 }
+
     constructor();
     constructor(vals: number[]);
     constructor(x: number, y: number, z: number);
-    constructor (x?: number | number[], y?: number, z?: number) {
+    constructor(x: number, y: number, z: number, w: number);
+    constructor (x?: number | number[], y?: number, z?: number, w?: number) {
         if (x instanceof Array) {
             this.vals = x;
         }
         else if (typeof(x) === "number") {
-            this.vals = [x, y, z];
+            this.vals = [x, y, z, w ?? 0];
         }
         else{
-            this.vals = [0, 0, 0];
+            this.vals = [0, 0, 0, w ?? 0];
         }
     }
 

@@ -1,4 +1,6 @@
+import { Point } from "../geometry/point";
 import { Tuple } from "../geometry/tuple";
+import { Vector } from "../geometry/vector";
 import { Matrix } from "./matrix";
 
 test ("matrix_cotr_createsEmpty4x4", () => {
@@ -72,7 +74,7 @@ test("matrix_functions_multiply", () => {
     expect(m1.times(m2)).toEqual(answer);
 });
 
-test("matrix_functions_multiplyByTuple", () => {
+test("matrix_multiply_byTuple", () => {
     let matrix = new Matrix(
     [[1, 2, 3, 4],
     [2, 4, 4, 2],
@@ -247,7 +249,7 @@ test("matrix_inverse_computesCorrectly", () => {
         [7, 7, -6, -7],
         [1, -3, 7, 4]]);
 
-    let b = m.inverse;
+    let b = m.inverse();
 
     let result = new Matrix([
         [0.21804511278195488, 0.45112781954887216, 0.24060150375939848, -0.045112781954887216],
@@ -280,7 +282,34 @@ test("matrix_inverse_productMultipliedByInverse", () => {
     ]);
 
     let c = a.times(b);
-    let inverse = b.inverse;
+    let inverse = b.inverse();
 
-    expect(c.times(inverse)).toEqual(a);
+    expect(c.times(inverse).m[0][3]).toBeCloseTo(a.m[0][3]);
+});
+
+test("matrix_translation_multiplyByPoint", () => {
+    let transform = Matrix.translation(5, -3, 2);
+    let point = new Point(-3, 4, 5);
+
+    let expected = new Point(2, 1, 7);
+
+    expect(transform.times(point)).toEqual(expected);
+});
+
+test("matrix_translation_multiplyByInverseMovesBackwards", () => {
+    let transform = Matrix.translation(5, -3, 2);
+    let inv = transform.inverse();
+
+    let point = new Point(-3, 4, 5);
+
+    let expected = new Point(-8, 7, 3);
+
+    expect(inv.times(point)).toEqual(expected);
+});
+
+test("matrix_translation_doesNotAffectVectors", () => {
+    let transform = Matrix.translation(5, -3, 2);
+    let vector = new Vector(-3, 4, 5);
+
+    expect(transform.times(vector)).toEqual(vector);
 });

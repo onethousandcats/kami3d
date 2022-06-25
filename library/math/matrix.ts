@@ -36,23 +36,8 @@ export class Matrix implements IMatrix {
 
     get invertible(): boolean { return this.determinant() != 0 }
 
-    get inverse(): Matrix {
-        if (!this.invertible) {
-            throw new Error("Not invertible");
-        }
-
-        let m2 = new Matrix(this.size);
-
-        for (let row = 0; row < this.size; row++) {
-            for (let col = 0; col < this.size; col++) {
-                let c = this.cofactor(row, col);
-                m2.m[col][row] = c / this.determinant();
-            }
-        }
-
-        return m2;
-    }
-
+    times(val: Tuple): Tuple;
+    times(val: Matrix): Matrix;
     times(val: Matrix | Tuple): Matrix | Tuple {
         let matrix = val instanceof Tuple ? val.toMatrix() : val;
 
@@ -85,6 +70,23 @@ export class Matrix implements IMatrix {
         }
 
         return transpose;
+    }
+
+    inverse(): Matrix {
+        if (!this.invertible) {
+            return new Matrix();
+        }
+
+        let m2 = new Matrix(this.size);
+
+        for (let row = 0; row < this.size; row++) {
+            for (let col = 0; col < this.size; col++) {
+                let c = this.cofactor(row, col);
+                m2.m[col][row] = (c / this.determinant());
+            }
+        }
+
+        return m2;
     }
 
     determinant(): number {
@@ -148,4 +150,13 @@ export class Matrix implements IMatrix {
         return m;
     }
 
+    static translation(x: number, y: number, z: number) : Matrix {
+        let identity = Matrix.identity();
+
+        identity.m[0][3] = x;
+        identity.m[1][3] = y;
+        identity.m[2][3] = z;
+
+        return identity;
+    }
 }
