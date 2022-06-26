@@ -1,16 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Tuple = void 0;
+var matrix_1 = require("../math/matrix");
 var Tuple = /** @class */ (function () {
-    function Tuple(x, y, z) {
+    function Tuple(x, y, z, w) {
         if (x instanceof Array) {
             this.vals = x;
         }
         else if (typeof (x) === "number") {
-            this.vals = [x, y, z];
+            this.vals = [x, y, z, w !== null && w !== void 0 ? w : 0];
         }
         else {
-            this.vals = [0, 0, 0];
+            this.vals = [0, 0, 0, w !== null && w !== void 0 ? w : 0];
         }
     }
     Object.defineProperty(Tuple.prototype, "x", {
@@ -32,6 +33,23 @@ var Tuple = /** @class */ (function () {
         configurable: true
     });
     ;
+    Object.defineProperty(Tuple.prototype, "w", {
+        get: function () { return this.vals[3]; },
+        set: function (val) { this.vals[3] = val; },
+        enumerable: false,
+        configurable: true
+    });
+    ;
+    Object.defineProperty(Tuple.prototype, "isPoint", {
+        get: function () { return this.w == 1; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Tuple.prototype, "isVector", {
+        get: function () { return this.w == 0; },
+        enumerable: false,
+        configurable: true
+    });
     Tuple.prototype.plus = function (val) {
         var results = this.vals.map(function (n, i) {
             return n + val.vals[i];
@@ -80,7 +98,15 @@ var Tuple = /** @class */ (function () {
             var k = (j + 1) % 3;
             return _this.vals[j] * val.vals[k] - _this.vals[k] * val.vals[j];
         });
+        crossProduct.push(0);
         return new Tuple(crossProduct);
+    };
+    Tuple.prototype.toMatrix = function () {
+        var m = [];
+        this.vals.map(function (n, i) {
+            m.push([n]);
+        });
+        return new matrix_1.Matrix(m);
     };
     Tuple.zero = function () {
         return new Tuple();

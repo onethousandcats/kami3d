@@ -1,11 +1,12 @@
 import { ITuple, Tuple } from "../geometry/tuple";
+import { Axes } from "./helpers";
 
 interface IMatrix {
     m: number[][];
     toTuple(): ITuple;
 }
 
-export class Matrix implements IMatrix {
+class Matrix implements IMatrix {
     
     m: number[][];
 
@@ -140,6 +141,39 @@ export class Matrix implements IMatrix {
         return new Tuple(t);
     }
 
+    getIdentity(): Matrix {
+        return Matrix.identity().times(this);
+    }
+
+    rotate(axis: Axes, radians: number): Matrix {
+        return Matrix.rotate(axis, radians).times(this);
+    }
+
+    static rotate(axis: Axes, radians: number): Matrix {
+        let identity = Matrix.identity();
+
+        switch (axis) {
+            case "x":
+                return Matrix.rotation_x(radians).times(identity);
+            case "y":
+                return Matrix.rotation_y(radians).times(identity);
+            case "z":
+                return Matrix.rotation_z(radians).times(identity);
+        }
+    }
+
+    scale(x: number, y: number, z: number): Matrix {
+        return Matrix.scale(x, y, z).times(this);
+    }
+
+    shear(xY: number, xZ: number, yX: number, yZ: number, zX: number, zY: number): Matrix {
+        return Matrix.shear(xY, xZ, yX, yZ, zX, zY).times(this);
+    }
+
+    translate(x: number, y: number, z: number): Matrix {
+        return Matrix.translate(x, y, z).times(this);
+    }
+
     static identity() {
         let m = new Matrix();
 
@@ -150,7 +184,7 @@ export class Matrix implements IMatrix {
         return m;
     }
 
-    static translation(x: number, y: number, z: number) : Matrix {
+    static translate(x: number, y: number, z: number): Matrix {
         let identity = Matrix.identity();
 
         identity.m[0][3] = x;
@@ -159,4 +193,62 @@ export class Matrix implements IMatrix {
 
         return identity;
     }
+
+    static scale(x: number, y: number, z: number): Matrix {
+        let identity = Matrix.identity();
+
+        identity.m[0][0] = x;
+        identity.m[1][1] = y;
+        identity.m[2][2] = z;
+
+        return identity;
+    }
+
+    static rotation_x(radians: number): Matrix {
+        let identity = Matrix.identity();
+
+        identity.m[1][1] = Math.cos(radians);
+        identity.m[1][2] = -Math.sin(radians);
+        identity.m[2][1] = Math.sin(radians);
+        identity.m[2][2] = Math.cos(radians);
+
+        return identity;
+    }
+
+    static rotation_y(radians: number): Matrix {
+        let identity = Matrix.identity();
+
+        identity.m[0][0] = Math.cos(radians);
+        identity.m[2][0] = -Math.sin(radians);
+        identity.m[0][2] = Math.sin(radians);
+        identity.m[2][2] = Math.cos(radians);
+
+        return identity;
+    }
+
+    static rotation_z(radians: number): Matrix {
+        let identity = Matrix.identity();
+
+        identity.m[0][0] = Math.cos(radians);
+        identity.m[0][1] = -Math.sin(radians);
+        identity.m[1][0] = Math.sin(radians);
+        identity.m[1][1] = Math.cos(radians);
+
+        return identity;
+    }
+
+    static shear(xY: number, xZ: number, yX: number, yZ: number, zX: number, zY: number): Matrix {
+        let identity = Matrix.identity();
+
+        identity.m[0][1] = xY;
+        identity.m[0][2] = xZ;
+        identity.m[1][0] = yX;
+        identity.m[1][2] = yZ;
+        identity.m[2][0] = zX;
+        identity.m[2][1] = zY;
+
+        return identity;
+    }
 }
+
+export { IMatrix, Matrix };

@@ -118,6 +118,8 @@ class Tuple implements ITuple {
             return this.vals[j] * val.vals[k] - this.vals[k] * val.vals[j];
         });
 
+        crossProduct.push(0);
+
         return new Tuple(crossProduct);
     }
 

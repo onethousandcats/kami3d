@@ -3,14 +3,18 @@ import { Tuple } from "./tuple";
 
 export class Vector extends Tuple {
     constructor();
+    constructor(vals: number[]);
     constructor(x: number, y: number, z: number);
-    constructor(x?: number, y?: number, z?: number) {
-        if (x == null) {
-            super();
-        } else {
-            super(x, y, z, 0);
+    constructor (x?: number | number[], y?: number, z?: number) {
+        if (x instanceof Array) {
+            super(x);
         }
-        
+        else if (typeof(x) === "number") {
+            super([x, y, z, 0]);
+        }
+        else{
+            super([0, 0, 0, 0]);
+        }
     }
 
     plus(val: Tuple): Vector {

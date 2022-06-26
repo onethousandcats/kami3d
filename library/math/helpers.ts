@@ -9,4 +9,6 @@ function Map(val: number, minIn: number, maxIn: number, minOut: number, maxOut: 
     return fit;
 }
 
-export { Map };
+type Axes = "x" | "y" | "z";
+
+export { Map, Axes };

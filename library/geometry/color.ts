@@ -13,6 +13,7 @@ export class Color extends Tuple {
     constructor();
     constructor(vals: number[]);
     constructor(r: number, g: number, b: number);
+    constructor(r: number, g: number, b: number, a: number);
     constructor (r?: number | number[], g?: number, b?: number, a?: number) {
         if (r instanceof Array) {
             super(r);
@@ -35,5 +36,9 @@ export class Color extends Tuple {
 
     times(val: number | Tuple): Color {
         return new Color(super.times(val).vals);
+    }
+
+    static black() {
+        return new Color(0, 0, 0);
     }
 }

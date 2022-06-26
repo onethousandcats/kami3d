@@ -16,11 +16,22 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Point = void 0;
+var matrix_1 = require("../math/matrix");
 var tuple_1 = require("./tuple");
 var Point = /** @class */ (function (_super) {
     __extends(Point, _super);
-    function Point() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function Point(x, y, z) {
+        var _this = this;
+        if (x instanceof Array) {
+            _this = _super.call(this, x) || this;
+        }
+        else if (typeof (x) === "number") {
+            _this = _super.call(this, [x, y, z, 1]) || this;
+        }
+        else {
+            _this = _super.call(this, [0, 0, 0, 1]) || this;
+        }
+        return _this;
     }
     Point.prototype.plus = function (val) {
         return _super.prototype.plus.call(this, val);
@@ -29,7 +40,18 @@ var Point = /** @class */ (function (_super) {
         return _super.prototype.minus.call(this, val);
     };
     Point.prototype.negate = function () {
-        return _super.prototype.negate.call(this);
+        return Point.zero().minus(this);
+    };
+    Point.zero = function () {
+        return new Point();
+    };
+    Point.prototype.toMatrix = function () {
+        var m = [];
+        this.vals.map(function (n, i) {
+            m.push([n]);
+        });
+        m.push([1]);
+        return new matrix_1.Matrix(m);
     };
     return Point;
 }(tuple_1.Tuple));

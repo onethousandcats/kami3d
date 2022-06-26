@@ -1,4 +1,6 @@
 import { Color } from "./library/geometry/color";
+import { Point } from "./library/geometry/point";
+import { Matrix } from "./library/math/matrix";
 import { Canvas } from "./library/visualization/canvas";
 
 let app = document.getElementById("app");
@@ -9,12 +11,20 @@ let ctx = htmlCanvas.getContext('2d');
 let width = htmlCanvas.width;
 let height = htmlCanvas.height;
 
-console.log(height);
-
 let canvas = new Canvas(width, height);
-let color1 = new Color(1, 0, 0);
+let color1 = new Color(1, 0.5, 0);
 
 canvas.writeAllPixels(color1);
+
+//make clock
+
+let p12 = new Point();
+
+let translate = Matrix.translate(width / 2, height / 2, 0);
+
+translate.times(p12);
+
+canvas.writePixel(p12.x, p12.y, Color.black());
 
 let pixels = canvas.getPixels();
 

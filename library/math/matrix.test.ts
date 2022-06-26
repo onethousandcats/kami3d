@@ -2,6 +2,7 @@ import { Point } from "../geometry/point";
 import { Tuple } from "../geometry/tuple";
 import { Vector } from "../geometry/vector";
 import { Matrix } from "./matrix";
+import { Axes } from "./helpers";
 
 test ("matrix_cotr_createsEmpty4x4", () => {
     let matrix = new Matrix();
@@ -288,7 +289,7 @@ test("matrix_inverse_productMultipliedByInverse", () => {
 });
 
 test("matrix_translation_multiplyByPoint", () => {
-    let transform = Matrix.translation(5, -3, 2);
+    let transform = Matrix.translate(5, -3, 2);
     let point = new Point(-3, 4, 5);
 
     let expected = new Point(2, 1, 7);
@@ -297,7 +298,7 @@ test("matrix_translation_multiplyByPoint", () => {
 });
 
 test("matrix_translation_multiplyByInverseMovesBackwards", () => {
-    let transform = Matrix.translation(5, -3, 2);
+    let transform = Matrix.translate(5, -3, 2);
     let inv = transform.inverse();
 
     let point = new Point(-3, 4, 5);
@@ -308,8 +309,232 @@ test("matrix_translation_multiplyByInverseMovesBackwards", () => {
 });
 
 test("matrix_translation_doesNotAffectVectors", () => {
-    let transform = Matrix.translation(5, -3, 2);
+    let transform = Matrix.translate(5, -3, 2);
     let vector = new Vector(-3, 4, 5);
 
     expect(transform.times(vector)).toEqual(vector);
+});
+
+test("matrix_scaling_matrixToPoint", () => {
+    let transform = Matrix.scale(2, 3, 4);
+    let p = new Point(-4, 6, 8);
+
+    let expected = new Point(-8, 18, 32);
+
+    expect(transform.times(p)).toEqual(expected);
+});
+
+test("matrix_scaling_matrixToVector", () => {
+    let transform = Matrix.scale(2, 3, 4);
+    let v = new Vector(-4, 6, 8);
+
+    let expected = new Vector(-8, 18, 32);
+
+    expect(transform.times(v)).toEqual(expected);
+});
+
+test("matrix_scaling_inverse", () => {
+    let transform = Matrix.scale(2, 3, 4);
+    let inv = transform.inverse();
+
+    let v = new Vector(-4, 6, 8);
+
+    let expected = new Vector(-2, 2, 2);
+
+    expect(inv.times(v)).toEqual(expected);
+});
+
+test("matrix_scaling_reflection", () => {
+    let transform = Matrix.scale(-1, 1, 1);
+    let p = new Point(2, 3, 4);
+    
+    let expected = new Point(-2, 3, 4);
+
+    expect(transform.times(p)).toEqual(expected);
+});
+
+test("matrix_rotation_aroundX", () => {
+    let p = new Point(0, 1, 0);
+
+    let halfQuarter = Matrix.rotation_x(Math.PI / 4);
+    let fullQuarter = Matrix.rotation_x(Math.PI / 2);
+
+    let expectQuarter = new Point(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2);
+    let expectFull = new Point(0, 0, 1);
+
+    expect(halfQuarter.times(p).x).toBeCloseTo(expectQuarter.x);
+    expect(halfQuarter.times(p).y).toBeCloseTo(expectQuarter.y);
+    expect(halfQuarter.times(p).z).toBeCloseTo(expectQuarter.z);
+
+    expect(fullQuarter.times(p).x).toBeCloseTo(expectFull.x);
+    expect(fullQuarter.times(p).y).toBeCloseTo(expectFull.y);
+    expect(fullQuarter.times(p).z).toBeCloseTo(expectFull.z);
+});
+
+test("matrix_rotation_aroundXinverse", () => {
+    let p = new Point(0, 1, 0);
+
+    let halfQuarter = Matrix.rotation_x(Math.PI / 4);
+    let inv = halfQuarter.inverse();
+
+    let expectQuarter = new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2);
+
+    expect(inv.times(p).x).toBeCloseTo(expectQuarter.x);
+    expect(inv.times(p).y).toBeCloseTo(expectQuarter.y);
+    expect(inv.times(p).z).toBeCloseTo(expectQuarter.z);
+});
+
+test("matrix_rotation_aroundY", () => {
+    let p = new Point(0, 0, 1);
+
+    let halfQuarter = Matrix.rotation_y(Math.PI / 4);
+    let fullQuarter = Matrix.rotation_y(Math.PI / 2);
+
+    let expectQuarter = new Point(Math.sqrt(2) / 2, 0, Math.sqrt(2) / 2);
+    let expectFull = new Point(1, 0, 0);
+
+    expect(halfQuarter.times(p).x).toBeCloseTo(expectQuarter.x);
+    expect(halfQuarter.times(p).y).toBeCloseTo(expectQuarter.y);
+    expect(halfQuarter.times(p).z).toBeCloseTo(expectQuarter.z);
+
+    expect(fullQuarter.times(p).x).toBeCloseTo(expectFull.x);
+    expect(fullQuarter.times(p).y).toBeCloseTo(expectFull.y);
+    expect(fullQuarter.times(p).z).toBeCloseTo(expectFull.z);
+});
+
+test("matrix_rotation_aroundZ", () => {
+    let p = new Point(0, 1, 0);
+
+    let halfQuarter = Matrix.rotation_z(Math.PI / 4);
+    let fullQuarter = Matrix.rotation_z(Math.PI / 2);
+
+    let expectQuarter = new Point(-Math.sqrt(2) / 2, Math.sqrt(2) / 2, 0);
+    let expectFull = new Point(-1, 0, 0);
+
+    expect(halfQuarter.times(p).x).toBeCloseTo(expectQuarter.x);
+    expect(halfQuarter.times(p).y).toBeCloseTo(expectQuarter.y);
+    expect(halfQuarter.times(p).z).toBeCloseTo(expectQuarter.z);
+
+    expect(fullQuarter.times(p).x).toBeCloseTo(expectFull.x);
+    expect(fullQuarter.times(p).y).toBeCloseTo(expectFull.y);
+    expect(fullQuarter.times(p).z).toBeCloseTo(expectFull.z);
+});
+
+test("matrix_shearing_xInProportionToY", () => {
+    let transform = Matrix.shear(1, 0, 0, 0, 0, 0);
+    let p = new Point(2, 3, 4);
+
+    let expected = new Point(5, 3, 4);
+
+    expect(transform.times(p)).toEqual(expected);
+});
+
+test("matrix_shearing_xInProportionToZ", () => {
+    let transform = Matrix.shear(0, 1, 0, 0, 0, 0);
+    let p = new Point(2, 3, 4);
+
+    let expected = new Point(6, 3, 4);
+
+    expect(transform.times(p)).toEqual(expected);
+});
+
+test("matrix_shearing_yInProportionToX", () => {
+    let transform = Matrix.shear(0, 0, 1, 0, 0, 0);
+    let p = new Point(2, 3, 4);
+
+    let expected = new Point(2, 5, 4);
+
+    expect(transform.times(p)).toEqual(expected);
+});
+
+test("matrix_shearing_yInProportionToZ", () => {
+    let transform = Matrix.shear(0, 0, 0, 1, 0, 0);
+    let p = new Point(2, 3, 4);
+
+    let expected = new Point(2, 7, 4);
+
+    expect(transform.times(p)).toEqual(expected);
+});
+
+test("matrix_shearing_zInProportionToX", () => {
+    let transform = Matrix.shear(0, 0, 0, 0, 1, 0);
+    let p = new Point(2, 3, 4);
+
+    let expected = new Point(2, 3, 6);
+
+    expect(transform.times(p)).toEqual(expected);
+});
+
+test("matrix_shearing_zInProportionToY", () => {
+    let transform = Matrix.shear(0, 0, 0, 0, 0, 1);
+    let p = new Point(2, 3, 4);
+
+    let expected = new Point(2, 3, 7);
+
+    expect(transform.times(p)).toEqual(expected);
+});
+
+test("matrix_identity_getIdentityReturnsItself", () => {
+    let m = new Matrix();
+    let id = m.getIdentity();
+
+    expect(m).toEqual(id);
+});
+
+test("matrix_chaining_individualInSequence", () => {
+    let p = new Point(1, 0, 1);
+    let a = Matrix.rotation_x(Math.PI / 2);
+    let b = Matrix.scale(5, 5, 5);
+    let c = Matrix.translate(10, 5, 7);
+
+    let pRotated = a.times(p);
+    let p2 = new Point(1, -1, 0);
+    pRotated.vals.forEach(function(n: number, i: number) {
+        expect(n).toBeCloseTo(p2.vals[i]);    
+    });
+
+    let p2Scaled = b.times(p2);
+    let p3 = new Point(5, -5, 0);
+    p2Scaled.vals.forEach(function(n: number, i: number) {
+        expect(n).toBeCloseTo(p3.vals[i]);    
+    });
+
+    let p4 = new Point(15, 0, 7);
+    expect(c.times(p3)).toEqual(p4);
+});
+
+test("matrix_chaining_chainedInReverse", () => {
+    let p = new Point(1, 0, 1);
+    let a = Matrix.rotation_x(Math.PI / 2);
+    let b = Matrix.scale(5, 5, 5);
+    let c = Matrix.translate(10, 5, 7);
+
+    let t = c.times(b.times(a));
+
+    let result = t.times(p);
+    let expected = new Point(15, 0, 7);
+
+    expect(result).toEqual(expected);
+});
+
+test("matrix_chaining_fluentAPI", () => {
+    let transform = Matrix.identity()
+        .rotate("x", Math.PI / 2)
+        .scale(5, 5, 5)
+        .translate(10, 5, 7);
+
+    let p = new Point(1, 0, 1);
+
+    let result = transform.times(p);
+    let expected = new Point(15, 0, 7);
+
+    expect(result).toEqual(expected);
+});
+
+test("matrix_chaining_rotationsWork", () => {
+    let a = Matrix.rotation_x(Math.PI / 2);
+    let b = Matrix.identity()
+                .rotate("x", Math.PI  / 2);
+
+    expect(a).toEqual(b);
 });

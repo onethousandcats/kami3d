@@ -19,8 +19,18 @@ exports.Color = void 0;
 var tuple_1 = require("./tuple");
 var Color = /** @class */ (function (_super) {
     __extends(Color, _super);
-    function Color() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function Color(r, g, b, a) {
+        var _this = this;
+        if (r instanceof Array) {
+            _this = _super.call(this, r) || this;
+        }
+        else if (typeof (r) === "number") {
+            _this = _super.call(this, [r, g, b, a !== null && a !== void 0 ? a : 0]) || this;
+        }
+        else {
+            _this = _super.call(this, [0, 0, 0, a !== null && a !== void 0 ? a : 0]) || this;
+        }
+        return _this;
     }
     Object.defineProperty(Color.prototype, "red", {
         get: function () { return this.x; },
@@ -40,6 +50,12 @@ var Color = /** @class */ (function (_super) {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(Color.prototype, "alpha", {
+        get: function () { return this.w; },
+        set: function (val) { this.w = val; },
+        enumerable: false,
+        configurable: true
+    });
     Color.prototype.plus = function (val) {
         return new Color(_super.prototype.plus.call(this, val).vals);
     };
@@ -48,6 +64,9 @@ var Color = /** @class */ (function (_super) {
     };
     Color.prototype.times = function (val) {
         return new Color(_super.prototype.times.call(this, val).vals);
+    };
+    Color.black = function () {
+        return new Color(0, 0, 0);
     };
     return Color;
 }(tuple_1.Tuple));
