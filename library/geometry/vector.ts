@@ -25,8 +25,16 @@ export class Vector extends Tuple {
         return super.minus(val) as Vector;
     }
 
+    times(val: number | Tuple): Vector {
+        return super.times(val) as Vector;
+    }
+
     negate(): Vector {
         return super.negate() as Vector;
+    }
+
+    reflect(normal: Vector): Vector {
+        return super.reflect(normal) as Vector;
     }
 
     toMatrix(): Matrix {

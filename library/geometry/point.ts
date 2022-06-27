@@ -1,5 +1,6 @@
 import { Matrix } from "../math/matrix";
 import { Tuple } from "./tuple";
+import { Vector } from "./vector";
 
 export class Point extends Tuple {
     constructor();

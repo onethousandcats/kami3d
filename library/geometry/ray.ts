@@ -46,7 +46,7 @@ export class Ray {
     }
 
     transform(m: Matrix): Ray {
-        let d = m.times(this.direction);
+        let d = m.times(this.direction) as Vector;
         let o = m.times(this.origin);
 
         return new Ray(o, d);

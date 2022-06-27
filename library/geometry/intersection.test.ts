@@ -89,7 +89,5 @@ test("intersections_add_putsInCorrectOrder", () => {
 
     xs.add(i4);
 
-    console.log(xs.intersections);
-
     expect(xs.intersections[1]).toEqual(i4);
 });

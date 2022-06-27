@@ -18,6 +18,7 @@ interface ITuple {
     negate() : ITuple;
     dot(val: ITuple): number;
     cross(val: ITuple): ITuple;
+    reflect(val: ITuple): ITuple;
     toMatrix() : Matrix;
 
     isPoint: boolean;
@@ -121,6 +122,10 @@ class Tuple implements ITuple {
         crossProduct.push(0);
 
         return new Tuple(crossProduct);
+    }
+
+    reflect(normal: Tuple): Tuple {
+        return this.minus(normal).times(2).times(this.dot(normal));
     }
 
     toMatrix(): Matrix {

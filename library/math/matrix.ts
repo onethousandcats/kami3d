@@ -1,4 +1,5 @@
 import { ITuple, Tuple } from "../geometry/tuple";
+import { Vector } from "../geometry/vector";
 import { Axes } from "./helpers";
 
 interface IMatrix {
@@ -139,6 +140,10 @@ class Matrix implements IMatrix {
         }
 
         return new Tuple(t);
+    }
+
+    toVector(): Vector {
+        return this.toTuple() as Vector;
     }
 
     getIdentity(): Matrix {

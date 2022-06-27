@@ -89,3 +89,27 @@ test("sphere_normal_isNormalized", () => {
 
     expect(n).toEqual(n.normalize());
 });
+
+test("sphere_normal_translated", () => {
+    let s = new Sphere();
+    s.transform = Matrix.translate(0, 1, 0);
+    let n = s.normalAt(new Point(0, 1.70711, -0.70711));
+    let expected = new Vector(0, 0.70711, -0.70711);
+
+    expect(n.x).toBeCloseTo(expected.x);
+    expect(n.y).toBeCloseTo(expected.y);
+    expect(n.z).toBeCloseTo(expected.z);
+});
+
+test("sphere_normal_scaledRotated", () => {
+    let s = new Sphere();
+    s.transform = Matrix.rotate("z", Math.PI / 5)
+        .scale(1, 0.5, 1);
+    let n = s.normalAt(new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2));
+    let expected = new Vector(0, 0.97014, -0.24254);
+
+    expect(n.x).toBeCloseTo(expected.x);
+    expect(n.y).toBeCloseTo(expected.y);
+    expect(n.z).toBeCloseTo(expected.z);
+});
+
