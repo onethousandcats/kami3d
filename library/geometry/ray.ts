@@ -1,3 +1,5 @@
+import { Matrix } from "../math/matrix";
+import { IntersectionGroup } from "./intersectionGroup";
 import { Object3d } from "./object";
 import { Point } from "./point";
 import { Vector } from "./vector";
@@ -15,8 +17,8 @@ export class Ray {
         return this.origin.plus(this.direction.times(t));
     }
     
-    intersects(object: Object3d): number[] {
-        let intersections = [];
+    intersects(object: Object3d): IntersectionGroup {
+        let intersections = new IntersectionGroup();
 
         let oToRay = this.origin.minus(object.position);
 
@@ -33,14 +35,20 @@ export class Ray {
         let t1 = (-b - Math.sqrt(d)) / (2 * a);
         let t2 = (-b + Math.sqrt(d)) / (2 * a);
 
-        intersections.push(t1);
-        intersections.push(t2);
+        intersections.add(t1, object);
+        intersections.add(t2, object);
 
         return intersections;
     }
 
     discriminant(a: number, b: number, c: number): number {
-
         return Math.pow(b, 2) - 4 * a * c;
+    }
+
+    transform(m: Matrix): Ray {
+        let d = m.times(this.direction);
+        let o = m.times(this.origin);
+
+        return new Ray(o, d);
     }
 }

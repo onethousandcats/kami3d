@@ -1,3 +1,4 @@
+import { Matrix } from "../math/matrix";
 import { Point } from "./point"
 import { Ray } from "./ray";
 import { Sphere } from "./sphere";
@@ -32,9 +33,9 @@ test("rays_intersect_sphereAtTwoPoints", () => {
 
     let xs = r.intersects(s);
 
-    expect(xs.length).toEqual(2);
-    expect(xs[0]).toEqual(4.0);
-    expect(xs[1]).toEqual(6.0);
+    expect(xs.count).toEqual(2);
+    expect(xs.intersections[0].t).toEqual(4.0);
+    expect(xs.intersections[1].t).toEqual(6.0);
 });
 
 test("rays_intersect_sphereAtTangent", () => {
@@ -47,9 +48,9 @@ test("rays_intersect_sphereAtTangent", () => {
 
     let xs = r.intersects(s);
 
-    expect(xs.length).toEqual(2);
-    expect(xs[0]).toEqual(5.0);
-    expect(xs[1]).toEqual(5.0);
+    expect(xs.count).toEqual(2);
+    expect(xs.intersections[0].t).toEqual(5.0);
+    expect(xs.intersections[1].t).toEqual(5.0);
 });
 
 test("rays_intersect_nothing", () => {
@@ -62,7 +63,7 @@ test("rays_intersect_nothing", () => {
 
     let xs = r.intersects(s);
 
-    expect(xs.length).toEqual(0);
+    expect(xs.count).toEqual(0);
 });
 
 test("rays_intersect_insideSphere", () => {
@@ -75,9 +76,9 @@ test("rays_intersect_insideSphere", () => {
 
     let xs = r.intersects(s);
 
-    expect(xs.length).toEqual(2);
-    expect(xs[0]).toEqual(-1.0);
-    expect(xs[1]).toEqual(1.0);
+    expect(xs.count).toEqual(2);
+    expect(xs.intersections[0].t).toEqual(-1.0);
+    expect(xs.intersections[1].t).toEqual(1.0);
 });
 
 test("rays_intersect_inFrontOfSphere", () => {
@@ -90,7 +91,27 @@ test("rays_intersect_inFrontOfSphere", () => {
 
     let xs = r.intersects(s);
 
-    expect(xs.length).toEqual(2);
-    expect(xs[0]).toEqual(-6.0);
-    expect(xs[1]).toEqual(-4.0);
+    expect(xs.count).toEqual(2);
+    expect(xs.intersections[0].t).toEqual(-6.0);
+    expect(xs.intersections[1].t).toEqual(-4.0);
+});
+
+test("rays_transform_translate", () => {
+    let r = new Ray(new Point(1, 2, 3), new Vector(0, 1, 0));
+    let m = Matrix.translate(3, 4, 5);
+
+    let r2 = r.transform(m);
+
+    expect(r2.origin).toEqual(new Point(4, 6, 8));
+    expect(r2.direction).toEqual(new Vector(0, 1, 0));
+});
+
+test("rays_transform_scale", () => {
+    let r = new Ray(new Point(1, 2, 3), new Vector(0, 1, 0));
+    let m = Matrix.scale(2, 3, 4);
+
+    let r2 = r.transform(m);
+
+    expect(r2.origin).toEqual(new Point(2, 6, 12));
+    expect(r2.direction).toEqual(new Vector(0, 3, 0));
 });

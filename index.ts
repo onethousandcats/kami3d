@@ -1,6 +1,7 @@
 import { Color } from "./library/geometry/color";
 import { Point } from "./library/geometry/point";
-import { Matrix } from "./library/math/matrix";
+import { Ray } from "./library/geometry/ray";
+import { Sphere } from "./library/geometry/sphere";
 import { Canvas } from "./library/visualization/canvas";
 
 let app = document.getElementById("app");
@@ -16,15 +17,33 @@ let color1 = new Color(1, 0.5, 0);
 
 canvas.writeAllPixels(color1);
 
-//make clock
+//make sphere silhouette
+let rayOrigin = new Point(0, 0, -5);
+let wallZ = 10;
+let wallSize = 7;
 
-let p12 = new Point();
+let pixelSize = wallSize / width;
+let middle = wallSize / 2;
 
-let translate = Matrix.translate(width / 2, height / 2, 0);
+let pixelSizeH = wallSize / height;
 
-translate.times(p12);
+let color2 = new Color(0, 0, 1);
+let sphere = new Sphere();
 
-canvas.writePixel(p12.x, p12.y, Color.black());
+for (let y = 0; y < height - 1; y++) {
+    let worldY = middle - pixelSize * y;
+    for (let x = 0; x < width - 1; x++) {
+        let worldX = -middle + pixelSize * x;
+        let position = new Point(worldX, worldY, wallZ);
+
+        let r = new Ray(rayOrigin, (position.minus(rayOrigin)).normalize());
+        let xs = sphere.intersect(r);
+
+        if (xs.hit() != null) {
+            canvas.writePixel(x, y, color2);
+        }
+    } 
+}
 
 let pixels = canvas.getPixels();
 
