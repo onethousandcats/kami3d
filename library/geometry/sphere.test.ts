@@ -1,5 +1,6 @@
 import { Matrix } from "../math/matrix";
 import { IntersectionGroup } from "./intersectionGroup";
+import { Material } from "./material";
 import { Point } from "./point";
 import { Ray } from "./ray";
 import { Sphere } from "./sphere"
@@ -111,5 +112,11 @@ test("sphere_normal_scaledRotated", () => {
     expect(n.x).toBeCloseTo(expected.x);
     expect(n.y).toBeCloseTo(expected.y);
     expect(n.z).toBeCloseTo(expected.z);
+});
+
+test("sphere_material_hasDefault", () => {
+    let s = new Sphere();
+
+    expect(s.material).toEqual(new Material());
 });
 

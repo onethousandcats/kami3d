@@ -125,7 +125,7 @@ class Tuple implements ITuple {
     }
 
     reflect(normal: Tuple): Tuple {
-        return this.minus(normal).times(2).times(this.dot(normal));
+        return this.minus(normal.times(2).times(this.dot(normal)));
     }
 
     toMatrix(): Matrix {

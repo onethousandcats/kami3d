@@ -15,5 +15,9 @@ test("vector_reflect_offSlantedSurface", () => {
 
     let expected = new Vector(1, 0, 0);
 
-    expect(v.reflect(n)).toEqual(expected);
+    let r = v.reflect(n);
+
+    expect(r.x).toBeCloseTo(expected.x);
+    expect(r.y).toBeCloseTo(expected.y);
+    expect(r.z).toBeCloseTo(expected.z);
 });
