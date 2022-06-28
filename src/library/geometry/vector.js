@@ -39,8 +39,14 @@ var Vector = /** @class */ (function (_super) {
     Vector.prototype.minus = function (val) {
         return _super.prototype.minus.call(this, val);
     };
+    Vector.prototype.times = function (val) {
+        return _super.prototype.times.call(this, val);
+    };
     Vector.prototype.negate = function () {
         return _super.prototype.negate.call(this);
+    };
+    Vector.prototype.reflect = function (normal) {
+        return _super.prototype.reflect.call(this, normal);
     };
     Vector.prototype.toMatrix = function () {
         var m = [];

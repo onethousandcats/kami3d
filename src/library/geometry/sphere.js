@@ -17,11 +17,19 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sphere = void 0;
 var object_1 = require("./object");
+var point_1 = require("./point");
 var Sphere = /** @class */ (function (_super) {
     __extends(Sphere, _super);
     function Sphere() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    Sphere.prototype.normalAt = function (p) {
+        var objectPoint = this.transform.inverse().times(p);
+        var objectNormal = objectPoint.minus(new point_1.Point());
+        p = this.transform.inverse().transpose().times(objectNormal);
+        p.w = 0;
+        return p.normalize();
+    };
     return Sphere;
 }(object_1.Object3d));
 exports.Sphere = Sphere;

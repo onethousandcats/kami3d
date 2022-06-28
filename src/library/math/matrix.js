@@ -128,6 +128,9 @@ var Matrix = /** @class */ (function () {
         }
         return new tuple_1.Tuple(t);
     };
+    Matrix.prototype.toVector = function () {
+        return this.toTuple();
+    };
     Matrix.prototype.getIdentity = function () {
         return Matrix.identity().times(this);
     };

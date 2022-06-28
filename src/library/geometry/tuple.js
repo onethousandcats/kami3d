@@ -101,6 +101,9 @@ var Tuple = /** @class */ (function () {
         crossProduct.push(0);
         return new Tuple(crossProduct);
     };
+    Tuple.prototype.reflect = function (normal) {
+        return this.minus(normal.times(2).times(this.dot(normal)));
+    };
     Tuple.prototype.toMatrix = function () {
         var m = [];
         this.vals.map(function (n, i) {

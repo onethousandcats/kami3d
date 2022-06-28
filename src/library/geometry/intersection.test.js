@@ -67,7 +67,6 @@ test("intersections_add_putsInCorrectOrder", function () {
     var i4 = new intersection_1.Intersection(s, 2);
     var xs = new intersectionGroup_1.IntersectionGroup([i1, i2, i3]);
     xs.add(i4);
-    console.log(xs.intersections);
     expect(xs.intersections[1]).toEqual(i4);
 });
 //# sourceMappingURL=intersection.test.js.map
