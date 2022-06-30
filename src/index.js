@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var color_1 = require("./library/geometry/color");
 var point_1 = require("./library/geometry/point");
+var pointLight_1 = require("./library/geometry/pointLight");
 var ray_1 = require("./library/geometry/ray");
 var sphere_1 = require("./library/geometry/sphere");
 var canvas_1 = require("./library/visualization/canvas");
@@ -11,8 +12,6 @@ var ctx = htmlCanvas.getContext('2d');
 var width = htmlCanvas.width;
 var height = htmlCanvas.height;
 var canvas = new canvas_1.Canvas(width, height);
-var color1 = new color_1.Color(1, 0.5, 0);
-canvas.writeAllPixels(color1);
 //make sphere silhouette
 var rayOrigin = new point_1.Point(0, 0, -5);
 var wallZ = 10;
@@ -20,8 +19,11 @@ var wallSize = 7;
 var pixelSize = wallSize / width;
 var middle = wallSize / 2;
 var pixelSizeH = wallSize / height;
-var color2 = new color_1.Color(0, 0, 1);
 var sphere = new sphere_1.Sphere();
+sphere.material.color = new color_1.Color(1, 0.2, 1);
+var lightPosition = new point_1.Point(-10, -10, -10);
+var lightColor = new color_1.Color(1, 1, 1);
+var light = new pointLight_1.PointLight(lightColor, lightPosition);
 for (var y = 0; y < height - 1; y++) {
     var worldY = middle - pixelSize * y;
     for (var x = 0; x < width - 1; x++) {
@@ -29,8 +31,13 @@ for (var y = 0; y < height - 1; y++) {
         var position = new point_1.Point(worldX, worldY, wallZ);
         var r = new ray_1.Ray(rayOrigin, (position.minus(rayOrigin)).normalize());
         var xs = sphere.intersect(r);
-        if (xs.hit() != null) {
-            canvas.writePixel(x, y, color2);
+        var hit = xs.hit();
+        if (hit != null) {
+            var p = r.position(hit.t);
+            var n = hit.obj.normalAt(p);
+            var eye = r.direction.negate();
+            var color = hit.obj.material.lighting(light, p, eye, n);
+            canvas.writePixel(x, y, color);
         }
     }
 }

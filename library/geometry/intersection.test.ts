@@ -91,3 +91,40 @@ test("intersections_add_putsInCorrectOrder", () => {
 
     expect(xs.intersections[1]).toEqual(i4);
 });
+
+test("intersections_precompute_intersectionState", () => {
+    let r = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
+    let s = new Sphere();
+    let i = new Intersection(s, 4);
+
+    let comps = i.prepareComputations(r);
+
+    expect(comps.t).toBe(i.t);
+    expect(comps.obj).toEqual(i.obj);
+    expect(comps.point).toEqual(new Point(0, 0, -1));
+    expect(comps.eyev).toEqual(new Vector(0, 0, -1));
+    expect(comps.normalv).toEqual(new Vector(0, 0, -1));
+});
+
+test("intersections_precompute_hitOccursOutside", () => {
+    let r = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
+    let s = new Sphere();
+    let i = new Intersection(s, 4);
+
+    let comps = i.prepareComputations(r);
+
+    expect(comps.inside).toBeFalsy();
+});
+
+test("intersections_precompute_hitOccursInside", () => {
+    let r = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
+    let s = new Sphere();
+    let i = new Intersection(s, 1);
+
+    let comps = i.prepareComputations(r);
+
+    expect(comps.inside).toBeTruthy();
+    expect(comps.point).toEqual(new Point(0, 0, 1));
+    expect(comps.eyev).toEqual(new Vector(0, 0, -1));
+    expect(comps.normalv).toEqual(new Vector(0, 0, -1));
+});

@@ -120,3 +120,13 @@ test("sphere_material_hasDefault", () => {
     expect(s.material).toEqual(new Material());
 });
 
+test("sphere_material_mayBeAssigned", () => {
+    let s = new Sphere();
+    let m = new Material();
+
+    m.ambient = 1.0;
+    s.material = m;
+
+    expect(s.material).toEqual(m);
+});
+

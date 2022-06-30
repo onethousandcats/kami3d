@@ -24,4 +24,31 @@ test("material_lighting_eyeBetweenLightandSurfaceOffset45", function () {
     var result = m.lighting(light, p, eyev, normalv);
     expect(result).toEqual(new color_1.Color(1.0, 1.0, 1.0));
 });
+test("material_lighting_pathOfReflectionVector", function () {
+    var eyev = new vector_1.Vector(0, -Math.sqrt(2) / 2, -Math.sqrt(2) / 2);
+    var normalv = new vector_1.Vector(0, 0, -1);
+    var light = new pointLight_1.PointLight(new color_1.Color(1, 1, 1), new point_1.Point(0, 10, -10));
+    var result = m.lighting(light, p, eyev, normalv);
+    expect(result.x).toBeCloseTo(1.6364);
+    expect(result.y).toBeCloseTo(1.6364);
+    expect(result.z).toBeCloseTo(1.6364);
+});
+test("material_lighting_eyeOppositeSurfaceOffset45", function () {
+    var eyev = new vector_1.Vector(0, 0, -1);
+    var normalv = new vector_1.Vector(0, 0, -1);
+    var light = new pointLight_1.PointLight(new color_1.Color(1, 1, 1), new point_1.Point(0, 10, -10));
+    var result = m.lighting(light, p, eyev, normalv);
+    expect(result.x).toBeCloseTo(0.7364);
+    expect(result.y).toBeCloseTo(0.7364);
+    expect(result.z).toBeCloseTo(0.7364);
+});
+test("material_lighting_behindTheSurface", function () {
+    var eyev = new vector_1.Vector(0, 0, -1);
+    var normalv = new vector_1.Vector(0, 0, -1);
+    var light = new pointLight_1.PointLight(new color_1.Color(1, 1, 1), new point_1.Point(0, 0, 10));
+    var result = m.lighting(light, p, eyev, normalv);
+    expect(result.x).toBeCloseTo(0.1);
+    expect(result.y).toBeCloseTo(0.1);
+    expect(result.z).toBeCloseTo(0.1);
+});
 //# sourceMappingURL=material.lighting.test.js.map

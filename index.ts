@@ -1,5 +1,6 @@
 import { Color } from "./library/geometry/color";
 import { Point } from "./library/geometry/point";
+import { PointLight } from "./library/geometry/pointLight";
 import { Ray } from "./library/geometry/ray";
 import { Sphere } from "./library/geometry/sphere";
 import { Canvas } from "./library/visualization/canvas";
@@ -13,9 +14,6 @@ let width = htmlCanvas.width;
 let height = htmlCanvas.height;
 
 let canvas = new Canvas(width, height);
-let color1 = new Color(1, 0.5, 0);
-
-canvas.writeAllPixels(color1);
 
 //make sphere silhouette
 let rayOrigin = new Point(0, 0, -5);
@@ -27,20 +25,32 @@ let middle = wallSize / 2;
 
 let pixelSizeH = wallSize / height;
 
-let color2 = new Color(0, 0, 1);
 let sphere = new Sphere();
+sphere.material.color = new Color(1, 0.2, 1);
+
+let lightPosition = new Point(-10, -10, -10);
+let lightColor = new Color(1, 1, 1);
+const light = new PointLight(lightColor, lightPosition);
 
 for (let y = 0; y < height - 1; y++) {
     let worldY = middle - pixelSize * y;
     for (let x = 0; x < width - 1; x++) {
-        let worldX = -middle + pixelSize * x;
-        let position = new Point(worldX, worldY, wallZ);
+        const worldX = -middle + pixelSize * x;
+        const position = new Point(worldX, worldY, wallZ);
 
-        let r = new Ray(rayOrigin, (position.minus(rayOrigin)).normalize());
+        const r = new Ray(rayOrigin, (position.minus(rayOrigin)).normalize());
         let xs = sphere.intersect(r);
 
-        if (xs.hit() != null) {
-            canvas.writePixel(x, y, color2);
+        const hit = xs.hit();
+
+        if (hit != null) {
+            const p = r.position(hit.t);
+            const n = hit.obj.normalAt(p);
+
+            let eye = r.direction.negate();
+            const color = hit.obj.material.lighting(light, p, eye, n);
+
+            canvas.writePixel(x, y, color);
         }
     } 
 }

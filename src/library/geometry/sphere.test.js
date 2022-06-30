@@ -88,4 +88,11 @@ test("sphere_material_hasDefault", function () {
     var s = new sphere_1.Sphere();
     expect(s.material).toEqual(new material_1.Material());
 });
+test("sphere_material_mayBeAssigned", function () {
+    var s = new sphere_1.Sphere();
+    var m = new material_1.Material();
+    m.ambient = 1.0;
+    s.material = m;
+    expect(s.material).toEqual(m);
+});
 //# sourceMappingURL=sphere.test.js.map

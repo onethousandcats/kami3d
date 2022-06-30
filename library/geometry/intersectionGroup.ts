@@ -38,6 +38,10 @@ export class IntersectionGroup {
         this.xs.sort(this.sortByT);
     }
 
+    combine(xs: IntersectionGroup) {
+        this.intersections = [].concat(this.intersections, xs.intersections);
+    }
+
     private pushSort(i: Intersection): number {
         this.intersections.push(i);
         this.sort();
