@@ -69,4 +69,32 @@ test("intersections_add_putsInCorrectOrder", function () {
     xs.add(i4);
     expect(xs.intersections[1]).toEqual(i4);
 });
+test("intersections_precompute_intersectionState", function () {
+    var r = new ray_1.Ray(new point_1.Point(0, 0, -5), new vector_1.Vector(0, 0, 1));
+    var s = new sphere_1.Sphere();
+    var i = new intersection_1.Intersection(s, 4);
+    var comps = i.prepareComputations(r);
+    expect(comps.t).toBe(i.t);
+    expect(comps.obj).toEqual(i.obj);
+    expect(comps.point).toEqual(new point_1.Point(0, 0, -1));
+    expect(comps.eyev).toEqual(new vector_1.Vector(0, 0, -1));
+    expect(comps.normalv).toEqual(new vector_1.Vector(0, 0, -1));
+});
+test("intersections_precompute_hitOccursOutside", function () {
+    var r = new ray_1.Ray(new point_1.Point(0, 0, -5), new vector_1.Vector(0, 0, 1));
+    var s = new sphere_1.Sphere();
+    var i = new intersection_1.Intersection(s, 4);
+    var comps = i.prepareComputations(r);
+    expect(comps.inside).toBeFalsy();
+});
+test("intersections_precompute_hitOccursInside", function () {
+    var r = new ray_1.Ray(new point_1.Point(0, 0, 0), new vector_1.Vector(0, 0, 1));
+    var s = new sphere_1.Sphere();
+    var i = new intersection_1.Intersection(s, 1);
+    var comps = i.prepareComputations(r);
+    expect(comps.inside).toBeTruthy();
+    expect(comps.point).toEqual(new point_1.Point(0, 0, 1));
+    expect(comps.eyev).toEqual(new vector_1.Vector(0, 0, -1));
+    expect(comps.normalv).toEqual(new vector_1.Vector(0, 0, -1));
+});
 //# sourceMappingURL=intersection.test.js.map

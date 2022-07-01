@@ -124,6 +124,10 @@ class Tuple implements ITuple {
         return new Tuple(crossProduct);
     }
 
+    toHundredth(): Tuple {
+        return new Tuple(this.x.toHundredths(), this.y.toHundredths(), this.z.toHundredths());
+    }
+
     reflect(normal: Tuple): Tuple {
         return this.minus(normal.times(2).times(this.dot(normal)));
     }

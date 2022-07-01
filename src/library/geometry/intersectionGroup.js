@@ -34,6 +34,9 @@ var IntersectionGroup = /** @class */ (function () {
     IntersectionGroup.prototype.sort = function () {
         this.xs.sort(this.sortByT);
     };
+    IntersectionGroup.prototype.combine = function (xs) {
+        this.intersections = [].concat(this.intersections, xs.intersections);
+    };
     IntersectionGroup.prototype.pushSort = function (i) {
         this.intersections.push(i);
         this.sort();
