@@ -1,6 +1,6 @@
 import { Matrix } from "../math/matrix";
 import { Color } from "./color";
-import { Intersection } from "./intersection";
+import { Computation } from "./computation";
 import { IntersectionGroup } from "./intersectionGroup";
 import { Object3d } from "./object";
 import { Point } from "./point";
@@ -48,6 +48,28 @@ export class World {
         xs.sort();
 
         return xs;
+    }
+
+    colorAt(r: Ray): Color {
+        let xs = this.intersect(r);
+        let hit = xs.hit();
+
+        if (hit == null) {
+            return Color.black();
+        }
+
+        let comps = hit.prepareComputations(r);
+        let color = this.shadeHit(comps);
+
+        return color;
+    }
+
+    shadeHit(c: Computation): Color {
+        return c.obj.material.lighting(
+            this.lightSource, 
+            c.point,
+            c.eyev, 
+            c.normalv);
     }
 
     contains(obj: Object3d): boolean {

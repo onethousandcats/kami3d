@@ -8,9 +8,36 @@ export class Ray {
     origin: Point;
     direction: Vector;
 
-    constructor(origin: Point, direction: Vector) {
-        this.origin = origin;
-        this.direction = direction;
+    constructor();
+    constructor(origin: Point, direction: Vector);
+    constructor(origin?: Point, direction?: Vector) {
+        if (origin != null) {
+            this.origin = origin;
+            this.direction = direction;
+        } else {
+            this.origin = new Point();
+            this.direction = new Vector();
+        }
+    }
+
+    static atOrigin(): Ray {
+        return new Ray();
+    }
+
+    static startingAt(x: number, y: number, z: number): Ray {
+        const p = new Point(x, y, z);
+        let r = new Ray();
+        r.origin = p;
+
+        return r;
+    }
+
+    
+
+    withDirectionOf(x: number, y: number, z: number): Ray {
+        const v = new Vector(x, y, z);
+        this.direction = v;
+        return this;
     }
 
     position(t: number): Point {

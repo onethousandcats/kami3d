@@ -128,3 +128,7 @@ test("intersections_precompute_hitOccursInside", () => {
     expect(comps.eyev).toEqual(new Vector(0, 0, -1));
     expect(comps.normalv).toEqual(new Vector(0, 0, -1));
 });
+
+test("intersections_shading_inside", () => {
+
+});
